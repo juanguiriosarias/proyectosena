@@ -1,0 +1,207 @@
+ function mostrarSeccion(id) {
+    document.querySelectorAll('.seccion, .seccion2, .seccion3, .faq-section, .inicio').forEach(s => s.classList.remove('activo'));
+    document.getElementById(id).classList.add('activo');
+  }
+
+  function volverInicio() {
+    mostrarSeccion('inicio');
+    document.getElementById('area').value = '';
+    document.getElementById('eficiencia').value = '';
+    document.getElementById('radiacion').value = '';
+    document.getElementById('tiempo').value = '';
+    document.getElementById('resultadoEnergia').innerText = '';
+    document.getElementById('costoInicial').value = '';
+    document.getElementById('incentivos').value = '';
+    document.getElementById('ahorro').value = '';
+    document.getElementById('resultadoRecuperacion').innerText = '';
+    document.getElementById('metrosDisponibles').value = '';
+    document.getElementById('tamanoPanel').value = '1.2';
+    document.getElementById('resultadoCantidad').innerText = '';
+    document.getElementById('numeroWhatsapp').value = '';
+    document.getElementById('numeroWhatsapp2').value = '';
+    document.getElementById('numeroWhatsapp3').value = '';
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('popupp').style.display = 'none';
+    document.getElementById('popuppp').style.display = 'none';
+    window.resultadoParaWhatsapp = '';
+  }
+
+  function calcularEnergia() {
+    const area = parseFloat(document.getElementById('area').value);
+    const eficiencia = parseFloat(document.getElementById('eficiencia').value);
+    const radiacion = parseFloat(document.getElementById('radiacion').value);
+    const tiempo = parseFloat(document.getElementById('tiempo').value);
+    if (isNaN(area) || isNaN(eficiencia) || isNaN(radiacion) || isNaN(tiempo)) {
+      document.getElementById('resultadoEnergia').innerText = 'Por favor, completa todos los campos correctamente.';
+      return;
+    }
+    const energia = area * eficiencia * radiacion * tiempo;
+    document.getElementById('resultadoEnergia').innerText = `Resultado energía generada: ${energia.toFixed(2)} kWh`;
+  }
+
+ function calcularCantidadPaneles() {
+  const metros = parseFloat(document.getElementById("metrosDisponibles").value);
+  const tamano = parseFloat(document.getElementById("tamanoPanel").value);
+
+  if (isNaN(metros) || isNaN(tamano) || metros <= 0 || tamano <= 0) {
+    document.getElementById("resultadoCantidad").innerText =
+      "Por favor, ingresa valores válidos para los metros cuadrados y el tamaño del panel.";
+    return;
+  }
+
+  const cantidad = Math.floor(metros / tamano);
+
+  document.getElementById("resultadoCantidad").innerText =
+    `Puedes instalar hasta ${cantidad} panel(es) de ${tamano} m² cada uno.`;
+}
+
+
+  function calcularRecuperacion() {
+    const c = parseFloat(document.getElementById('costoInicial').value);
+    const i = parseFloat(document.getElementById('incentivos').value);
+    const a = parseFloat(document.getElementById('ahorro').value);
+    if (isNaN(c) || isNaN(i) || isNaN(a) || a <= 0) {
+      document.getElementById('resultadoRecuperacion').innerText = 'Por favor, completa todos los campos correctamente.';
+      return;
+    }
+    const r = (c - i) / a / 12;
+    document.getElementById('resultadoRecuperacion').innerText = `Resultado de tiempo de recuperación: ${r.toFixed(2)} años`;
+  }
+
+function enviarResultados() {
+  const res = document.getElementById('resultadoEnergia').innerText;
+  if (!res.trim()) return alert("Primero debes calcular la energía.");
+  window.resultadoParaWhatsapp = res;
+  document.getElementById('popup').style.display = 'block';
+}
+
+function enviarResultados2() {
+  const res = document.getElementById('resultadoRecuperacion').innerText;
+  if (!res.trim()) return alert("Primero calcula la recuperación.");
+  window.resultadoParaWhatsapp = res;
+  document.getElementById('popupp').style.display = 'block';
+}
+
+function enviarResultados3() {
+  const res = document.getElementById('resultadoCantidad').innerText;
+  if (!res.trim()) return alert("Primero calcula los paneles.");
+  window.resultadoParaWhatsapp = res;
+  document.getElementById('popuppp').style.display = 'block';
+}
+
+function cerrarPopup() {
+  document.getElementById('popup').style.display = 'none';
+}
+function cerrarPopup2() {
+  document.getElementById('popupp').style.display = 'none';
+}
+function cerrarPopup3() {
+  document.getElementById('popuppp').style.display = 'none';
+}
+
+function enviarWhatsapp() {
+  const numero = document.getElementById('numeroWhatsapp').value.trim();
+  if (!numero || !/^\d+$/.test(numero)) return alert("Número inválido.");
+  const msg = encodeURIComponent(window.resultadoParaWhatsapp);
+  window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${msg}`, '_blank');
+  cerrarPopup();
+}
+
+function enviarWhatsapp2() {
+  const numero = document.getElementById('numeroWhatsapp2').value.trim();
+  if (!numero || !/^\d+$/.test(numero)) return alert("Número inválido.");
+  const msg = encodeURIComponent(window.resultadoParaWhatsapp);
+  window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${msg}`, '_blank');
+  cerrarPopup2();
+}
+
+function enviarWhatsapp3() {
+  const numero = document.getElementById('numeroWhatsapp3').value.trim();
+  if (!numero || !/^\d+$/.test(numero)) return alert("Número inválido.");
+  const msg = encodeURIComponent(window.resultadoParaWhatsapp);
+  window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${msg}`, '_blank');
+  cerrarPopup3();
+}
+
+  function toggleAnswer(element) {
+    const answer = element.nextElementSibling;
+    answer.style.display = answer.style.display === "block" ? "none" : "block";
+  }
+
+// Mostrar u ocultar formularios de login y registro
+function mostrarRegistro() {
+  document.getElementById('auth-container').style.display = 'none';
+  document.getElementById('registro-container').style.display = 'block';
+}
+
+function mostrarLogin() {
+  document.getElementById('registro-container').style.display = 'none';
+  document.getElementById('auth-container').style.display = 'block';
+}
+
+// Registrar nuevo usuario
+function registrarUsuario() {
+  const nombre = document.getElementById('regNombre').value.trim();
+  const correo = document.getElementById('regCorreo').value.trim();
+  const celular = document.getElementById('regCelular').value.trim();
+  const usuario = document.getElementById('regUsuario').value.trim();
+  const clave = document.getElementById('regClave').value.trim();
+
+  if (!nombre || !correo || !celular || !usuario || !clave) {
+    alert("Por favor completa todos los campos.");
+    return;
+  }
+
+  let usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+  if (usuarios.find(u => u.usuario === usuario)) {
+    alert("Ese usuario ya existe.");
+    return;
+  }
+
+  usuarios.push({ nombre, correo, celular, usuario, clave });
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  alert("Usuario registrado exitosamente. Ahora puedes iniciar sesión.");
+  mostrarLogin();
+}
+
+// Iniciar sesión
+function iniciarSesion() {
+  const usuario = document.getElementById('loginUser').value.trim();
+  const clave = document.getElementById('loginPass').value.trim();
+
+  let usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+  const user = usuarios.find(u => u.usuario === usuario && u.clave === clave);
+
+  if (user) {
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('registro-container').style.display = 'none';
+    document.querySelector('.contenedor').style.display = 'block';
+
+    // 🔹 Mostrar sección de inicio
+    document.getElementById('inicio').classList.add('activo');
+
+  } else {
+    alert("Usuario o contraseña incorrectos.");
+  }
+}
+// Al cargar la página, ocultar la calculadora
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelector('.contenedor').style.display = 'none';
+});
+
+function cerrarSesion() {
+    // Oculta calculadora
+    document.querySelector('.contenedor').style.display = 'none';
+
+    // Muestra login
+    document.getElementById('auth-container').style.display = 'block';
+    document.getElementById('registro-container').style.display = 'none';
+
+    // Limpia campos
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+
+    // Limpia secciones activas
+    document.querySelectorAll('.seccion, .seccion2, .seccion3, .faq-section, .inicio').forEach(s => s.classList.remove('activo'));
+  }
+
